@@ -1,5 +1,6 @@
 package takaichi00.springcloudgatewaysample;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @EnableConfigurationProperties(UriConfiguration.class)
 public class SpringCloudGatewaySampleApplication {
+
+  @Autowired
+  SampleFilter sampleFilter;
 
   public static void main(String[] args) {
     SpringApplication.run(SpringCloudGatewaySampleApplication.class, args);
@@ -38,6 +42,9 @@ public class SpringCloudGatewaySampleApplication {
         .route(p -> p
             .path("/get")
             .filters(f -> f.addRequestHeader("Hello", "World"))
+            .uri(httpUri))
+        .route(p -> p
+            .path("/get/1").filters(f -> f.filter(sampleFilter))
             .uri(httpUri))
         .route(p -> p
             .host("*.circuitbreaker.com")
