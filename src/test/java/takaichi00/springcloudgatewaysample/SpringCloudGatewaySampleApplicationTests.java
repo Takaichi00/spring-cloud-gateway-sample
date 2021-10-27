@@ -36,7 +36,6 @@ class SpringCloudGatewaySampleApplicationTests {
         .expectStatus().isOk()
         .expectBody()
         .jsonPath("$.headers.Hello").isEqualTo("World");
-
     webClient
         .get().uri("/delay/3")
         .header("Host", "www.circuitbreaker.com")
@@ -47,4 +46,31 @@ class SpringCloudGatewaySampleApplicationTests {
             response -> assertThat(response.getResponseBody()).isEqualTo("fallback".getBytes()));
 
   }
+
+  @Test
+  void filterOkTest() {
+    stubFor(get(urlEqualTo("/get/1"))
+        .willReturn(aResponse()
+            .withBody("{\"headers\":{\"Hello\":\"World\"}}")
+            .withHeader("Content-Type", "application/json")));
+
+    webClient
+        .get().uri("/get/1").header("x-api-key", "test")
+        .exchange()
+        .expectStatus().isOk();
+  }
+
+  @Test
+  void filterFailTest() {
+    stubFor(get(urlEqualTo("/get/1"))
+        .willReturn(aResponse()
+            .withBody("{\"headers\":{\"Hello\":\"World\"}}")
+            .withHeader("Content-Type", "application/json")));
+
+    webClient
+        .get().uri("/get/1")
+        .exchange()
+        .expectStatus().isForbidden();
+  }
+
 }
