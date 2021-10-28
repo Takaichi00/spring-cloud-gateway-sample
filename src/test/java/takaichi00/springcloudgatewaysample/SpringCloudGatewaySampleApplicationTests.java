@@ -10,7 +10,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = {"httpbin=http://localhost:${wiremock.server.port}"})
+    properties = {"http_bin=http://localhost:${wiremock.server.port}"})
 @AutoConfigureWireMock(port = 0)
 class SpringCloudGatewaySampleApplicationTests {
 
@@ -72,5 +72,4 @@ class SpringCloudGatewaySampleApplicationTests {
         .exchange()
         .expectStatus().isForbidden();
   }
-
 }
