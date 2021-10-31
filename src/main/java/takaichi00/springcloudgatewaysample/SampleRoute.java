@@ -18,7 +18,10 @@ public class SampleRoute {
     return builder.routes()
         .route(p -> p
             .path("/get")
-            .filters(f -> f.addRequestHeader("Hello", "World"))
+            .filters(f -> f
+                .addRequestHeader("Hello", "World")
+                .addResponseHeader("CustomResponse", "Gateway was passed")
+            )
             .uri(httpUri))
         .route(p -> p
             .path("/get/1").filters(f -> f.filter(sampleFilter))

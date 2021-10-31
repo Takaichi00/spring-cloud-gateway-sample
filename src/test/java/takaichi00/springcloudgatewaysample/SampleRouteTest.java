@@ -28,6 +28,7 @@ class SampleRouteTest {
         .get().uri("/get")
         .exchange()
         .expectStatus().isOk()
+        .expectHeader().valueEquals("CustomResponse", "Gateway was passed")
         .expectBody()
         .jsonPath("$.headers.Hello").isEqualTo("World");
   }
