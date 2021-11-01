@@ -1,1 +1,11 @@
 http_bin: "http://httpbin.org:80"
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: after_route
+          uri: https://example.org
+          predicates:
+            - Cookie=mycookie,mycookievalue
+            - Path=/example

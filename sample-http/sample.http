@@ -4,3 +4,6 @@ GET http://localhost:8080/get
 ###
 GET http://localhost:8080/delay/3
 Host: www.circuitbreaker.com
+
+###
+GET http://localhost:8080/example
