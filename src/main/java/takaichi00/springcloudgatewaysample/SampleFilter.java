@@ -21,12 +21,12 @@ public class SampleFilter implements GatewayFilter {
     ServerHttpRequest request = exchange.getRequest();
     //Make your business logic, this is a simple sample.
     if (!request.getHeaders().containsKey("x-api-key")) {
-      return this.onError(exchange, "api-key missing", HttpStatus.FORBIDDEN);
+      return this.onError(exchange, HttpStatus.FORBIDDEN);
     }
     return chain.filter(exchange); //Forward to route
   }
 
-  private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus)  {
+  private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus)  {
     ServerHttpResponse response = exchange.getResponse();
     response.setStatusCode(httpStatus);
     return response.setComplete();
