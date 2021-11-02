@@ -1,16 +1,16 @@
 package takaichi00.springcloudgatewaysample;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@AllArgsConstructor
 public class SampleRoute {
 
-  @Autowired
-  SampleFilter sampleFilter;
+  private final SampleFilter sampleFilter;
 
   @Bean
   public RouteLocator myRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {

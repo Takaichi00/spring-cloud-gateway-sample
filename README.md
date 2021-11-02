@@ -12,3 +12,9 @@ $ curl --dump-header - --header 'Host: www.circuitbreaker.com' http://localhost:
 ```
 
 - Wiremock は [11. Spring Cloud Contract WireMock](https://cloud.spring.io/spring-cloud-contract/2.0.x/multi/multi__spring_cloud_contract_wiremock.html) を利用
+
+# TODO
+- [ ] Pre / Post Request
+- [ ] Retry and Retry Test
+- [ ] Challenge circuit breaker
+- [ ] Custom Error Handler
