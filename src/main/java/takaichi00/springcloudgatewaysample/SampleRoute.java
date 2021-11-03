@@ -24,7 +24,7 @@ public class SampleRoute {
             )
             .uri(httpUri))
         .route(p -> p
-            .path("/get/1").filters(f -> f.filter(sampleFilter))
+            .path("/status/200").filters(f -> f.filter(sampleFilter))
             .uri(httpUri))
         .route(p -> p
             .host("*.circuitbreaker.com")

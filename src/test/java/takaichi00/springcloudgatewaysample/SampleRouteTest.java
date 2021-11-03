@@ -51,26 +51,26 @@ class SampleRouteTest {
 
   @Test
   void filterOkTest() {
-    stubFor(get(urlEqualTo("/get/1"))
+    stubFor(get(urlEqualTo("/status/200"))
         .willReturn(aResponse()
             .withBody("{\"headers\":{\"Hello\":\"World\"}}")
             .withHeader("Content-Type", "application/json")));
 
     webClient
-        .get().uri("/get/1").header("x-api-key", "test")
+        .get().uri("/status/200").header("x-api-key", "test")
         .exchange()
         .expectStatus().isOk();
   }
 
   @Test
   void filterFailTest() {
-    stubFor(get(urlEqualTo("/get/1"))
+    stubFor(get(urlEqualTo("/status/200"))
         .willReturn(aResponse()
             .withBody("{\"headers\":{\"Hello\":\"World\"}}")
             .withHeader("Content-Type", "application/json")));
 
     webClient
-        .get().uri("/get/1")
+        .get().uri("/status/200")
         .exchange()
         .expectStatus().isForbidden();
   }
