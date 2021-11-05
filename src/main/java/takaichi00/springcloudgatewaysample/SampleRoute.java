@@ -5,6 +5,10 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+
+import java.time.Duration;
 
 @Configuration
 @AllArgsConstructor
@@ -24,7 +28,13 @@ public class SampleRoute {
             )
             .uri(httpUri))
         .route(p -> p
-            .path("/status/200").filters(f -> f.filter(sampleFilter))
+            .path("/status/200").filters(f -> f
+                .filter(sampleFilter)
+                .retry(retryConfig -> retryConfig
+                  .setRetries(1)
+                  .setBackoff(Duration.ofMillis(10), Duration.ofMillis(50), 2, false)
+                  .setSeries(HttpStatus.Series.SERVER_ERROR)
+                  .setMethods(HttpMethod.GET)))
             .uri(httpUri))
         .route(p -> p
             .host("*.circuitbreaker.com")
