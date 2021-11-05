@@ -63,8 +63,36 @@ class DetailSampleRouteTest {
         .inScenario("Retry Scenario")
         .willReturn(aResponse()
             .withStatus(500))
-        .willSetStateTo("Cause Success")
-    );
+        .willSetStateTo("Cause Success"));
+
+    wiremock.stubFor(get(urlEqualTo("/status/200"))
+        .inScenario("Retry Scenario")
+        .whenScenarioStateIs("Cause Success")
+        .willReturn(aResponse()
+            .withStatus(200)));
+
+    webTestClient
+        .get()
+          .uri("/status/200")
+          .header("x-api-key", "test")
+        .exchange()
+        .expectStatus()
+          .isOk();
+
+    VerificationResult result = wiremock.countRequestsMatching(
+        getRequestedFor(urlEqualTo("/status/200")).build());
+
+    assertThat(result.getCount()).isEqualTo(2);
+  }
+
+  @Test
+  void test_1回目のリクエストがタイムアウトで2回目のリクエストが200OKだった場合は200OKが返る() {
+    wiremock.stubFor(get(urlEqualTo("/status/200"))
+        .inScenario("Retry Scenario")
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withFixedDelay(500))
+        .willSetStateTo("Cause Success"));
 
     wiremock.stubFor(get(urlEqualTo("/status/200"))
         .inScenario("Retry Scenario")
