@@ -3,6 +3,7 @@ package takaichi00.springcloudgatewaysample;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -10,12 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+
 // Reference: https://www.fixes.pub/program/199584.html
 
 @RefreshScope
 @Component
 public class SampleFilter implements GatewayFilter {
 
+  @Order(HIGHEST_PRECEDENCE)
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
