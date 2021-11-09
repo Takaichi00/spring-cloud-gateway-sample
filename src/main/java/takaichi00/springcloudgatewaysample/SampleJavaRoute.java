@@ -1,5 +1,6 @@
 package takaichi00.springcloudgatewaysample;
 
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -8,11 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import java.time.Duration;
-
 @Configuration
 @AllArgsConstructor
-public class SampleRoute {
+public class SampleJavaRoute {
 
   private final SampleFilter sampleFilter;
 

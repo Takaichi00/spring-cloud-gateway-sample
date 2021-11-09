@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {"http_bin=http://localhost:${wiremock.server.port}"})
 @AutoConfigureWireMock(port = 0)
-class SampleRouteTest {
+class SampleJavaRouteTest {
 
   @Autowired
   private WebTestClient webClient;

@@ -24,7 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {"http_bin=http://localhost:18080",
         "wiremock.reset-mappings-after-each-test=true"})
-class DetailSampleRouteTest {
+class DetailSampleJavaRouteTest {
 
   private final static WireMockServer wiremock = new WireMockServer(options().port(18080));
 
