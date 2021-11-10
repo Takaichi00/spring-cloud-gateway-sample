@@ -3,10 +3,10 @@ spring:
     gateway:
       httpclient:
         connect-timeout: 100
-        response-timeout: 1000
+        response-timeout: 300
       routes:
         - id: after_route
-          uri: https://example.com
+          uri: http://localhost:18080
           predicates:
             - Path=/example
           filters:

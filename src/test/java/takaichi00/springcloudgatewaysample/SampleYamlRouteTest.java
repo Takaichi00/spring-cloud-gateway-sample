@@ -14,7 +14,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {"http_bin=http://localhost:${wiremock.server.port}"})
-@AutoConfigureWireMock(port = 0)
+@AutoConfigureWireMock(port = 18080)
 class SampleYamlRouteTest {
 
   @Autowired
@@ -22,17 +22,16 @@ class SampleYamlRouteTest {
 
   @Test
   void getHttpBin() {
-//    stubFor(get(urlEqualTo("/get"))
-//        .willReturn(aResponse()
-//            .withBody("{\"headers\":{\"Hello\":\"World\"}}")
-//            .withHeader("Content-Type", "application/json")));
+    stubFor(get(urlEqualTo("/"))
+        .willReturn(aResponse()
+            .withBody("{\"example\":\"Hello\"}")
+            .withHeader("Content-Type", "application/json")));
 
     webClient
         .get().uri("/example")
         .exchange()
-        .expectStatus().isOk();
-//        .expectBody()
-//        .jsonPath("$.example").isEqualTo("hello");
+        .expectStatus().isOk()
+        .expectBody()
+        .jsonPath("$.example").isEqualTo("Hello");
   }
-
 }
