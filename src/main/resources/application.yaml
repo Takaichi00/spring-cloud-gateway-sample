@@ -5,7 +5,8 @@ spring:
     gateway:
       routes:
         - id: after_route
-          uri: https://example.org
+          uri: https://example.com
           predicates:
-            - Cookie=mycookie,mycookievalue
             - Path=/example
+          filters:
+          - RewritePath=/example, /
