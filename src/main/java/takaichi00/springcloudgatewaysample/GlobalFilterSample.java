@@ -13,7 +13,7 @@ public class GlobalFilterSample {
 
   @Bean
   @Order(-1)
-  public GlobalFilter a() {
+  public GlobalFilter firstOrderFilter() {
     return (exchange, chain) -> {
       log.info("first pre filter");
       return chain.filter(exchange).then(Mono.fromRunnable(() -> {
@@ -24,7 +24,7 @@ public class GlobalFilterSample {
 
   @Bean
   @Order(0)
-  public GlobalFilter b() {
+  public GlobalFilter secondOrderFilter() {
     return (exchange, chain) -> {
       log.info("second pre filter");
       return chain.filter(exchange).then(Mono.fromRunnable(() -> {
@@ -35,7 +35,7 @@ public class GlobalFilterSample {
 
   @Bean
   @Order(1)
-  public GlobalFilter c() {
+  public GlobalFilter thirdOrderFilter() {
     return (exchange, chain) -> {
       log.info("third pre filter");
       return chain.filter(exchange).then(Mono.fromRunnable(() -> {

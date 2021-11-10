@@ -16,8 +16,8 @@ $ curl --dump-header - --header 'Host: www.circuitbreaker.com' http://localhost:
 # TODO
 - [x] setting route with yaml file / testing 
 - [x] Retry and Retry Test
-- [x] Custom filter
-- [ ] Global filter: Pre / Post Request
+- [x] Custom filter (https://www.fixes.pub/program/199584.html)
+- [x] Global filter: Pre / Post Request (https://www.javainuse.com/spring/cloud-gateway)
 - [ ] Custom Error Handler
 - [ ] Challenge circuit breaker
 - [ ] Analyze JFR
