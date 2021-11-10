@@ -3,4 +3,11 @@ spring:
     gateway:
       httpclient:
         connect-timeout: 100
-        response-timeout: 300
+        response-timeout: 1000
+      routes:
+        - id: after_route
+          uri: https://example.com
+          predicates:
+            - Path=/example
+          filters:
+            - RewritePath=/example, /

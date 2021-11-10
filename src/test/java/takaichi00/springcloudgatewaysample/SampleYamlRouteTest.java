@@ -21,7 +21,6 @@ class SampleYamlRouteTest {
   private WebTestClient webClient;
 
   @Test
-  @Disabled
   void getHttpBin() {
 //    stubFor(get(urlEqualTo("/get"))
 //        .willReturn(aResponse()
