@@ -34,6 +34,22 @@ class SampleJavaRouteTest {
   }
 
   @Test
+  void 許可していないHttpMethodの場合は404エラーが返る() {
+    stubFor(get(urlEqualTo("/get"))
+        .willReturn(aResponse()
+            .withBody("{\"headers\":{\"Hello\":\"World\"}}")
+            .withHeader("Content-Type", "application/json")));
+
+    webClient
+        .post().uri("/get")
+        .exchange()
+        .expectStatus()
+        .isNotFound();
+
+    verify(0, getRequestedFor(urlEqualTo("/get")));
+  }
+
+  @Test
   void circuitbreaker() {
     stubFor(get(urlEqualTo("/delay/3"))
         .willReturn(aResponse()

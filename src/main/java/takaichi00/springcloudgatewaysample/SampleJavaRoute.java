@@ -21,6 +21,8 @@ public class SampleJavaRoute {
     return builder.routes()
         .route(p -> p
             .path("/get")
+            .and()
+            .method(HttpMethod.GET)
             .filters(f -> f
                 .addRequestHeader("Hello", "World")
                 .addResponseHeader("CustomResponse", "Gateway was passed")
