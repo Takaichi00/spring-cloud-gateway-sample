@@ -25,8 +25,7 @@ public class SampleJavaRoute {
             .method(HttpMethod.GET)
             .filters(f -> f
                 .addRequestHeader("Hello", "World")
-                .addResponseHeader("CustomResponse", "Gateway was passed")
-            )
+                .addResponseHeader("CustomResponse", "Gateway was passed"))
             .uri(httpUri))
         .route(p -> p
             .path("/status/200").filters(f -> f
