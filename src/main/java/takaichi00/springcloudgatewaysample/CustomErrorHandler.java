@@ -2,6 +2,7 @@ package takaichi00.springcloudgatewaysample;
 
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,7 @@ public class CustomErrorHandler implements ErrorWebExceptionHandler {
       return Mono.error(ex);
     }
     response.getHeaders().setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+    response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
     String responseJsonBody = "{\"message\":\"error has occurred\"}";
     DataBuffer dataBuffer = response.bufferFactory().wrap(responseJsonBody.getBytes());
     return response.writeWith(Mono.just(dataBuffer));
