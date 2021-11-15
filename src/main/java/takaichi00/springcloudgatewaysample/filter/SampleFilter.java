@@ -1,4 +1,6 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloudgatewaysample.filter;
+
+import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -10,8 +12,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
 // Reference: https://www.fixes.pub/program/199584.html
 

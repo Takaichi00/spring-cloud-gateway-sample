@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import takaichi00.springcloudgatewaysample.config.UriConfiguration;
+import takaichi00.springcloudgatewaysample.filter.SampleFilter;
 
 @Configuration
 @AllArgsConstructor
