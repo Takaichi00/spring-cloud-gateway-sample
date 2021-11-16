@@ -18,7 +18,7 @@ class SampleJavaRouteTest {
   private WebTestClient webClient;
 
   @Test
-  void getHttpBin() {
+  void getにアクセスしたときのサンプルテスト() {
     stubFor(get(urlEqualTo("/get"))
         .willReturn(aResponse()
             .withBody("{\"headers\":{\"Hello\":\"World\"}}")
@@ -50,7 +50,7 @@ class SampleJavaRouteTest {
   }
 
   @Test
-  void circuitbreaker() {
+  void circuitbreakerが正しく機能することを確かめるテスト() {
     stubFor(get(urlEqualTo("/delay/3"))
         .willReturn(aResponse()
             .withBody("no fallback")
@@ -66,7 +66,7 @@ class SampleJavaRouteTest {
   }
 
   @Test
-  void filterOkTest() {
+  void SampleFilterが設定されていたあ場合_特定のヘッダーが設定されていれば200OKが返却される() {
     stubFor(get(urlEqualTo("/status/200"))
         .willReturn(aResponse()
             .withBody("{\"headers\":{\"Hello\":\"World\"}}")
@@ -79,7 +79,7 @@ class SampleJavaRouteTest {
   }
 
   @Test
-  void filterFailTest() {
+  void SampleFilterが設定されていたあ場合_特定のヘッダーが設定されていない場合は403が返却される() {
     stubFor(get(urlEqualTo("/status/200"))
         .willReturn(aResponse()
             .withBody("{\"headers\":{\"Hello\":\"World\"}}")
