@@ -1,5 +1,8 @@
 package takaichi00.springcloudgatewaysample;
 
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.CONNECT_TIMEOUT_ATTR;
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPONSE_TIMEOUT_ATTR;
+
 import java.time.Duration;
 import lombok.AllArgsConstructor;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -18,7 +21,7 @@ public class SampleJavaRoute {
   private final SampleFilter sampleFilter;
 
   @Bean
-  public RouteLocator myRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
+  public RouteLocator sampleRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
     String httpUri = uriConfiguration.getHttpbin();
     return builder.routes()
         .route(p -> p
@@ -44,6 +47,29 @@ public class SampleJavaRoute {
                 .circuitBreaker(config -> config
                     .setName("mycmd")
                     .setFallbackUri("forward:/fallback")))
+            .uri(httpUri))
+        .build();
+  }
+
+  @Bean
+  public RouteLocator retryAndCircuitbreakerRoutes(RouteLocatorBuilder builder,
+                                                   UriConfiguration uriConfiguration) {
+    String httpUri = uriConfiguration.getHttpbin();
+    return builder.routes().route(p -> p
+            .host("*.circuitbreaker.with-retry.com")
+            .filters(f -> f
+                .circuitBreaker(config -> config
+                    .setName("with-retry")
+                    .setFallbackUri("forward:/fallback/with-retry"))
+                .retry(retryConfig -> retryConfig
+                .setRetries(2)
+                .setBackoff(Duration.ofMillis(10),
+                            Duration.ofMillis(50), 2, false)
+                .setSeries(HttpStatus.Series.SERVER_ERROR)
+                .setMethods(HttpMethod.GET, HttpMethod.POST))
+            )
+            .metadata(CONNECT_TIMEOUT_ATTR, 50)
+            .metadata(RESPONSE_TIMEOUT_ATTR, 100)
             .uri(httpUri))
         .build();
   }
