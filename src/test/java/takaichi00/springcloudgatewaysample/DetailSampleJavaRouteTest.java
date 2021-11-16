@@ -58,7 +58,7 @@ class DetailSampleJavaRouteTest {
   }
 
   @Test
-  void test_1回目のリクエストが500エラーで2回目のリクエストが200OKだった場合は200OKが返る() {
+  void _1回目のリクエストが500エラーで2回目のリクエストが200OKだった場合は200OKが返る() {
     wiremock.stubFor(get(urlEqualTo("/status/200"))
         .inScenario("Retry Scenario")
         .willReturn(aResponse()
@@ -86,7 +86,7 @@ class DetailSampleJavaRouteTest {
   }
 
   @Test
-  void test_1回目のリクエストがタイムアウトで2回目のリクエストが200OKだった場合は200OKが返る() {
+  void _1回目のリクエストがタイムアウトで2回目のリクエストが200OKだった場合は200OKが返る() {
     wiremock.stubFor(get(urlEqualTo("/status/200"))
         .inScenario("Retry Scenario")
         .willReturn(aResponse()
@@ -115,7 +115,7 @@ class DetailSampleJavaRouteTest {
   }
 
   @Test
-  void test_2回ともタイムアウトだった場合は504が返る() {
+  void _2回ともタイムアウトだった場合は504が返る() {
     wiremock.stubFor(get(urlEqualTo("/status/200"))
         .inScenario("Retry Scenario")
         .willReturn(aResponse()

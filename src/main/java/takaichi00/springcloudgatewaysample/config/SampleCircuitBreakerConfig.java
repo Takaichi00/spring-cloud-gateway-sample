@@ -20,4 +20,14 @@ public class SampleCircuitBreakerConfig {
             .build())
         .build());
   }
+
+  @Bean
+  public Customizer<ReactiveResilience4JCircuitBreakerFactory> withRetryCustomizer() {
+    return factory ->
+        factory.configure(builder -> builder
+            .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
+            .timeLimiterConfig(TimeLimiterConfig.custom()
+                .timeoutDuration(Duration.ofMillis(5000))
+                .build()),  "with-retry");
+  }
 }
