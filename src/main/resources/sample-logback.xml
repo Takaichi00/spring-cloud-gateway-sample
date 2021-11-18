@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<included>
+    <appender name="SAMPLE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/application.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/application.%d.log.gz</fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!-- filtering less than INFO level -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="takaichi00.springcloudgatewaysample.config.LogbackSampleLayout"/>
+        </encoder>
+    </appender>
+
+    <appender name="SAMPLE_APPENDER_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="SAMPLE_APPENDER"/>
+    </appender>
+
+    <!-- refer: http://logback.qos.ch/manual/layouts_ja.html -->
+    <logger level="INFO" name="takaichi00">
+        <appender-ref ref="SAMPLE_APPENDER_ASYNC" />
+    </logger>
+</included>

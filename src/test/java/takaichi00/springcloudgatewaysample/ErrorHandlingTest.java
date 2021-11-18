@@ -22,7 +22,17 @@ class ErrorHandlingTest {
 
   @Test
   void 何らかの例外が発生した場合のテスト() {
-    doThrow(new RuntimeException()).when(sampleFilter).filter(any(), any());
+
+    RuntimeException runtimeException = null;
+
+    try {
+      Integer nullValue = null;
+      nullValue.intValue();
+    } catch (RuntimeException e) {
+      runtimeException = e;
+    }
+
+    doThrow(runtimeException).when(sampleFilter).filter(any(), any());
     webClient
         .get().uri("/get")
         .exchange()

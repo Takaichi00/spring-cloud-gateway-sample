@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration>
+    <!-- refer: https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.logging -->
+    <!-- refer: https://spring.pleiades.io/spring-boot/docs/2.1.4.RELEASE/reference/html/howto-logging.html#howto-configure-logback-for-logging-fileonly -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!-- appender for STDOUT -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- !test and !default -->
+    <springProfile name="!test &amp;&amp; !default">
+        <property name="LOG_DIR" value="/tmp" />
+        <include resource="sample-logback.xml" />
+    </springProfile>
+
+    <!-- test or default -->
+    <springProfile name="test || default">
+        <root level="INFO">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+</configuration>
