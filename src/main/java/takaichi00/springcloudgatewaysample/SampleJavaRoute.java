@@ -73,4 +73,20 @@ public class SampleJavaRoute {
             .uri(httpUri))
         .build();
   }
+
+  @Bean
+  public RouteLocator customizeCircuitbreakerRoutes(RouteLocatorBuilder builder,
+                                                   UriConfiguration uriConfiguration) {
+    String httpUri = uriConfiguration.getHttpbin();
+    return builder.routes().route(p -> p
+            .host("*.circuitbreaker.customize.com")
+            .filters(f -> f
+                .circuitBreaker(config -> config
+                    .setName("customize")
+                    .setFallbackUri("forward:/fallback")))
+            .metadata(CONNECT_TIMEOUT_ATTR, 50)
+            .metadata(RESPONSE_TIMEOUT_ATTR, 100)
+            .uri(httpUri))
+        .build();
+  }
 }
