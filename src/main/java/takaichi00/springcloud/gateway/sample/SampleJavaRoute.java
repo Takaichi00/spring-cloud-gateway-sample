@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloud.gateway.sample;
 
 import static org.springframework.cloud.gateway.support.RouteMetadataUtils.CONNECT_TIMEOUT_ATTR;
 import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPONSE_TIMEOUT_ATTR;
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import takaichi00.springcloudgatewaysample.config.UriConfiguration;
-import takaichi00.springcloudgatewaysample.filter.SampleFilter;
+import takaichi00.springcloud.gateway.sample.config.UriConfiguration;
+import takaichi00.springcloud.gateway.sample.filter.SampleFilter;
 
 @Configuration
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloud.gateway.sample;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

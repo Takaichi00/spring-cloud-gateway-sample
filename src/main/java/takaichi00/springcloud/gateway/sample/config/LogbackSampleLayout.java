@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample.config;
+package takaichi00.springcloud.gateway.sample.config;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.CoreConstants;

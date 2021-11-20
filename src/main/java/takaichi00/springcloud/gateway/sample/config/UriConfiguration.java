@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample.config;
+package takaichi00.springcloud.gateway.sample.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

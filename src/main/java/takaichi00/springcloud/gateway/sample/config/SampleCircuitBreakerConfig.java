@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample.config;
+package takaichi00.springcloud.gateway.sample.config;
 
 import static io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType.COUNT_BASED;
 
@@ -46,7 +46,7 @@ public class SampleCircuitBreakerConfig {
                 .slowCallRateThreshold(50)
                 .slowCallDurationThreshold(Duration.ofMillis(1000))
                 .permittedNumberOfCallsInHalfOpenState(3)
-                .maxWaitDurationInHalfOpenState(Duration.ofMillis(0))
+                .maxWaitDurationInHalfOpenState(Duration.ofMillis(100))
                 .slidingWindowType(COUNT_BASED)
                 .slidingWindowSize(20)
                 .minimumNumberOfCalls(5)

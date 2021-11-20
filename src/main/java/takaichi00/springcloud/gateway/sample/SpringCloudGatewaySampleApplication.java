@@ -1,9 +1,9 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloud.gateway.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import takaichi00.springcloudgatewaysample.config.UriConfiguration;
+import takaichi00.springcloud.gateway.sample.config.UriConfiguration;
 
 @SpringBootApplication
 @EnableConfigurationProperties(UriConfiguration.class)

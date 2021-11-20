@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloud.gateway.sample;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;

@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample;
+package takaichi00.springcloud.gateway.sample;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;

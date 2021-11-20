@@ -14,7 +14,7 @@
             <level>INFO</level>
         </filter>
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-            <layout class="takaichi00.springcloudgatewaysample.config.LogbackSampleLayout"/>
+            <layout class="takaichi00.springcloud.gateway.sample.config.LogbackSampleLayout"/>
         </encoder>
     </appender>
 

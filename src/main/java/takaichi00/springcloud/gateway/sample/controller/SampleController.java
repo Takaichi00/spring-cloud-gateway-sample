@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample.controller;
+package takaichi00.springcloud.gateway.sample.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package takaichi00.springcloudgatewaysample.filter;
+package takaichi00.springcloud.gateway.sample.filter;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
