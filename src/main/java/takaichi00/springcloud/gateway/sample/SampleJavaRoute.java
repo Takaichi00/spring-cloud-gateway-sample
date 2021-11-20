@@ -78,7 +78,7 @@ public class SampleJavaRoute {
                 .setSeries(HttpStatus.Series.SERVER_ERROR)
                 .setMethods(HttpMethod.GET, HttpMethod.POST))
             )
-            .metadata(CONNECT_TIMEOUT_ATTR, 50)
+            .metadata(CONNECT_TIMEOUT_ATTR, 100)
             .metadata(RESPONSE_TIMEOUT_ATTR, 100)
             .uri(httpUri))
         .build();
@@ -89,13 +89,18 @@ public class SampleJavaRoute {
                                                    SampleConfigurationProperties uriConfiguration) {
     String httpUri = uriConfiguration.getHttpBin();
     return builder.routes().route(p -> p
+            .path("/status/201")
+              .and()
+            .method(HttpMethod.POST)
+              .and()
             .host("*.circuitbreaker.customize.com")
             .filters(f -> f
                 .circuitBreaker(config -> config
                     .setName("customize")
-                    .setFallbackUri("forward:/fallback")))
-            .metadata(CONNECT_TIMEOUT_ATTR, 50)
-            .metadata(RESPONSE_TIMEOUT_ATTR, 100)
+                    .setFallbackUri("forward:/fallback/customize"))
+            )
+            .metadata(CONNECT_TIMEOUT_ATTR, 500)
+            .metadata(RESPONSE_TIMEOUT_ATTR, 500)
             .uri(httpUri))
         .build();
   }

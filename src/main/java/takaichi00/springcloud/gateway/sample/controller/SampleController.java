@@ -21,4 +21,11 @@ public class SampleController {
   public void fallbackWithRetry() {
     log.error("backend call with retry is timeout");
   }
+
+  @RequestMapping("/fallback/customize")
+  @ResponseStatus(HttpStatus.BAD_GATEWAY)
+  public void fallbackCustomize() {
+    log.error("custom fallback");
+  }
+
 }
