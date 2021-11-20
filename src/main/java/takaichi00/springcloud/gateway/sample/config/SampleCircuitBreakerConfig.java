@@ -29,7 +29,7 @@ public class SampleCircuitBreakerConfig {
         factory.configure(builder -> builder
             .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
             .timeLimiterConfig(TimeLimiterConfig.custom()
-                .timeoutDuration(Duration.ofMillis(5000))
+                .timeoutDuration(Duration.ofMillis(10000))
                 .build()),  "with-retry");
   }
 
@@ -54,7 +54,7 @@ public class SampleCircuitBreakerConfig {
                 .automaticTransitionFromOpenToHalfOpenEnabled(false)
                 .build())
             .timeLimiterConfig(TimeLimiterConfig.custom()
-                .timeoutDuration(Duration.ofMillis(5000))
+                .timeoutDuration(Duration.ofMillis(10000))
                 .build()),  "customize");
   }
 }

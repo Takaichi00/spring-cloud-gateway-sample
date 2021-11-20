@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import takaichi00.springcloud.gateway.sample.config.UriConfiguration;
+import takaichi00.springcloud.gateway.sample.config.SampleConfigurationProperties;
 import takaichi00.springcloud.gateway.sample.filter.SampleFilter;
 
 @Configuration
@@ -21,8 +21,9 @@ public class SampleJavaRoute {
   private final SampleFilter sampleFilter;
 
   @Bean
-  public RouteLocator sampleRoutes(RouteLocatorBuilder builder, UriConfiguration uriConfiguration) {
-    String httpUri = uriConfiguration.getHttpbin();
+  public RouteLocator sampleRoutes(RouteLocatorBuilder builder,
+                                   SampleConfigurationProperties sampleConfigurationProperties) {
+    String httpUri = sampleConfigurationProperties.getHttpBin();
     return builder.routes()
         .route(p -> p
             .path("/get")
@@ -37,7 +38,12 @@ public class SampleJavaRoute {
                 .filter(sampleFilter)
                 .retry(retryConfig -> retryConfig
                   .setRetries(1)
-                  .setBackoff(Duration.ofMillis(10), Duration.ofMillis(50), 2, false)
+                    .setBackoff(Duration.ofMillis(sampleConfigurationProperties.getSample()
+                            .getFirstBackoff()),
+                        Duration.ofMillis(sampleConfigurationProperties.getSample()
+                            .getMaxBackoff()),
+                        sampleConfigurationProperties.getSample().getFactor(),
+                        false)
                   .setSeries(HttpStatus.Series.SERVER_ERROR)
                   .setMethods(HttpMethod.GET)))
             .uri(httpUri))
@@ -53,8 +59,8 @@ public class SampleJavaRoute {
 
   @Bean
   public RouteLocator retryAndCircuitbreakerRoutes(RouteLocatorBuilder builder,
-                                                   UriConfiguration uriConfiguration) {
-    String httpUri = uriConfiguration.getHttpbin();
+                                     SampleConfigurationProperties sampleConfigurationProperties) {
+    String httpUri = sampleConfigurationProperties.getHttpBin();
     return builder.routes().route(p -> p
             .host("*.circuitbreaker.with-retry.com")
             .filters(f -> f
@@ -63,8 +69,12 @@ public class SampleJavaRoute {
                     .setFallbackUri("forward:/fallback/with-retry"))
                 .retry(retryConfig -> retryConfig
                 .setRetries(2)
-                .setBackoff(Duration.ofMillis(10),
-                            Duration.ofMillis(50), 2, false)
+                .setBackoff(Duration.ofMillis(sampleConfigurationProperties.getSample()
+                                                                           .getFirstBackoff()),
+                            Duration.ofMillis(sampleConfigurationProperties.getSample()
+                                                                           .getMaxBackoff()),
+                            sampleConfigurationProperties.getSample().getFactor(),
+                    false)
                 .setSeries(HttpStatus.Series.SERVER_ERROR)
                 .setMethods(HttpMethod.GET, HttpMethod.POST))
             )
@@ -76,8 +86,8 @@ public class SampleJavaRoute {
 
   @Bean
   public RouteLocator customizeCircuitbreakerRoutes(RouteLocatorBuilder builder,
-                                                   UriConfiguration uriConfiguration) {
-    String httpUri = uriConfiguration.getHttpbin();
+                                                   SampleConfigurationProperties uriConfiguration) {
+    String httpUri = uriConfiguration.getHttpBin();
     return builder.routes().route(p -> p
             .host("*.circuitbreaker.customize.com")
             .filters(f -> f

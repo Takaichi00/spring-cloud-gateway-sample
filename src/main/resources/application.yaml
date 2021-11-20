@@ -10,3 +10,8 @@ spring:
             - Path=/example
           filters:
           - RewritePath=/example, /
+
+sample:
+  first-backoff: 10
+  max-backoff: 10
+  factor: 2

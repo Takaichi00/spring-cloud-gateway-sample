@@ -59,6 +59,9 @@ class DetailSampleJavaRouteTest {
 
   @Test
   void _1回目のリクエストが500エラーで2回目のリクエストが200OKだった場合は200OKが返る() {
+    /* NOTE : retry first-backoff が短すぎる (ex: 10ms) だと、2つめの wiremock が立ち上がる前に retry を実施してしまいテストが失敗することがある。
+     * テスト単体の実行では ↑ は再現しないが、すべてのテストを実行すると再現する模様。
+     */
     wiremock.stubFor(get(urlEqualTo("/status/200"))
         .inScenario("Retry Scenario")
         .willReturn(aResponse()
