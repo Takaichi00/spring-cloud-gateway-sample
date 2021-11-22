@@ -1,8 +1,16 @@
 package takaichi00.springcloud.gateway.sample;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.verification.VerificationResult;
+import java.time.Duration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,17 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
-import java.time.Duration;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {"http_bin=http://localhost:18080",
@@ -59,7 +56,7 @@ class CircuitBreakerSampleTest {
   }
 
   @Test
-  void _1回目のリクエストが500エラーで2回目のリクエストが200OKだった場合は200OKが返る() {
+  void _1回目のリクエストで成功した場合() {
 
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")
@@ -81,4 +78,26 @@ class CircuitBreakerSampleTest {
     assertThat(result.getCount()).isEqualTo(1);
   }
 
+  @Test
+  void _1回目のリクエストが失敗した場合はCircuitbreakerはOPENにならなずにそのままレスポンスが返る() {
+
+    wiremock.stubFor(post(urlEqualTo("/status/201"))
+        .inScenario("Custom CircuitBreaker Scenario")
+        .willReturn(aResponse()
+            .withStatus(500))
+        .willSetStateTo("Cause Success"));
+
+    webTestClient
+        .post()
+        .uri("/status/201")
+        .header("Host", "www.circuitbreaker.customize.com")
+        .exchange()
+        .expectStatus()
+        .isEqualTo(500);
+
+    VerificationResult result = wiremock.countRequestsMatching(
+        postRequestedFor(urlEqualTo("/status/201")).build());
+
+    assertThat(result.getCount()).isEqualTo(1);
+  }
 }
