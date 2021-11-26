@@ -55,6 +55,8 @@ class CircuitBreakerSampleTest {
     wiremock.stop();
   }
 
+  // TODO テストを全件回すと Circuitbreaker が OPEN になったままになってしまいテストが失敗することがある
+
   @Test
   void _1回目のリクエストで成功した場合() {
 
@@ -102,7 +104,7 @@ class CircuitBreakerSampleTest {
   }
 
   @Test
-  void _4回目と5回目のリクエストが失敗したときはCircuitbreakerがOPENになり6回目のリクエストはfallbackのレスポンスが返ると思ったが返らない() {
+  void _4回目と5回目のリクエストが失敗したときはCircuitbreakerがOPENになり6回目のリクエストはfallbackのレスポンスが返る() {
     //1
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")
@@ -143,13 +145,12 @@ class CircuitBreakerSampleTest {
         .header("Host", "www.circuitbreaker.customize.com")
         .exchange()
         .expectStatus()
-//        .isEqualTo(502); NOTE: Circuitbreaker が OPEN になると考えたがならない
-    .isEqualTo(500);
+        .isEqualTo(502);
 
     VerificationResult result = wiremock.countRequestsMatching(
         postRequestedFor(urlEqualTo("/status/201")).build());
 
-    assertThat(result.getCount()).isEqualTo(6);
+    assertThat(result.getCount()).isEqualTo(5);
   }
 
   @Test
@@ -170,8 +171,8 @@ class CircuitBreakerSampleTest {
               .withStatus(201))
           .willSetStateTo("Count" + (i + 1)));
     }
-    //6-50
-    for (int i = 5; i < 50; ++i) {
+    //6-30
+    for (int i = 5; i < 30; ++i) {
       wiremock.stubFor(post(urlEqualTo("/status/201"))
           .inScenario("Custom CircuitBreaker Scenario")
           .whenScenarioStateIs("Count" + i)
@@ -180,7 +181,7 @@ class CircuitBreakerSampleTest {
           .willSetStateTo("Count" + (i + 1)));
     }
 
-    for (int i = 0; i < 49; ++i) {
+    for (int i = 0; i < 29; ++i) {
       webTestClient
           .post()
           .uri("/status/201")
@@ -200,11 +201,11 @@ class CircuitBreakerSampleTest {
         .exchange()
         .expectStatus()
 //        .isEqualTo(502); // NOTE: Circuitbreaker が OPEN になると考えたがならない
-        .isEqualTo(500);
+        .isEqualTo(502);
 
     VerificationResult result = wiremock.countRequestsMatching(
         postRequestedFor(urlEqualTo("/status/201")).build());
 
-    assertThat(result.getCount()).isEqualTo(50);
+    assertThat(result.getCount()).isEqualTo(9);
   }
 }

@@ -96,6 +96,7 @@ public class SampleJavaRoute {
             .host("*.circuitbreaker.customize.com")
             .filters(f -> f
                 .circuitBreaker(config -> config
+                    .addStatusCode("500")
                     .setName("customize")
                     .setFallbackUri("forward:/fallback/customize"))
             )
