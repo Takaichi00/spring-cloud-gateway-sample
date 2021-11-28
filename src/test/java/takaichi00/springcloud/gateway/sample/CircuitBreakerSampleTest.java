@@ -200,7 +200,6 @@ class CircuitBreakerSampleTest {
         .header("Host", "www.circuitbreaker.customize.com")
         .exchange()
         .expectStatus()
-//        .isEqualTo(502); // NOTE: Circuitbreaker が OPEN になると考えたがならない
         .isEqualTo(502);
 
     VerificationResult result = wiremock.countRequestsMatching(
