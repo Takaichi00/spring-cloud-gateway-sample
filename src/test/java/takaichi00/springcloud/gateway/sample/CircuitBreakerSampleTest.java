@@ -81,7 +81,7 @@ class CircuitBreakerSampleTest {
   }
 
   @Test
-  void _1回目のリクエストが失敗した場合はCircuitbreakerはOPENにならなずにそのままレスポンスが返る() {
+  void _1回目のリクエストが失敗した場合はCircuitbreakerはOPENにならなずにそのままfallbackのレスポンスが返る() {
 
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")
@@ -95,7 +95,7 @@ class CircuitBreakerSampleTest {
         .header("Host", "www.circuitbreaker.customize.com")
         .exchange()
         .expectStatus()
-        .isEqualTo(500);
+        .isEqualTo(502);
 
     VerificationResult result = wiremock.countRequestsMatching(
         postRequestedFor(urlEqualTo("/status/201")).build());
@@ -104,7 +104,7 @@ class CircuitBreakerSampleTest {
   }
 
   @Test
-  void _4回目と5回目のリクエストが失敗したときはCircuitbreakerがOPENになり6回目のリクエストはfallbackのレスポンスが返る() {
+  void _4回目と5回目のリクエストが失敗したときはCircuitbreakerがOPENになり6回目のリクエストはBackendへRoutingしない() {
     //1
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")
@@ -131,21 +131,22 @@ class CircuitBreakerSampleTest {
           .willSetStateTo("Count" + (i + 1)));
     }
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 3; ++i) {
       webTestClient
           .post()
           .uri("/status/201")
           .header("Host", "www.circuitbreaker.customize.com")
-          .exchange();
+          .exchange().expectStatus().isEqualTo(201);
     }
 
-    webTestClient
-        .post()
-        .uri("/status/201")
-        .header("Host", "www.circuitbreaker.customize.com")
-        .exchange()
-        .expectStatus()
-        .isEqualTo(502);
+    for (int i = 0; i < 3; ++i) {
+      webTestClient
+          .post()
+          .uri("/status/201")
+          .header("Host", "www.circuitbreaker.customize.com")
+          .exchange().expectStatus().isEqualTo(502);
+    }
+
 
     VerificationResult result = wiremock.countRequestsMatching(
         postRequestedFor(urlEqualTo("/status/201")).build());
