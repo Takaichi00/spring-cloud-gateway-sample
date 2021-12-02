@@ -1,5 +1,6 @@
 package takaichi00.springcloud.gateway.sample;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class CustomErrorHandler implements ErrorWebExceptionHandler {
   @Override
-  public Mono<Void> handle(ServerWebExchange serverWebExchange, Throwable ex) {
+  public Mono<Void> handle(ServerWebExchange serverWebExchange, @NonNull Throwable ex) {
 
     log.error("exception has occurred. exception is:", ex);
 
