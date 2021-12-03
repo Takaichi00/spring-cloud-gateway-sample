@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
     "server.port=12301"})
 class CircuitBreaker_1Test extends CircuitBreakerTestBase {
   @Test
-  void _4回目と5回目のリクエストが失敗したときはCircuitbreakerがOPENになり6回目のリクエストはBackendへRoutingしない() {
+  void _4回目と5回目のリクエストが500エラーで失敗したときはCircuitbreakerがOPENになり6回目のリクエストはBackendへRoutingしない() {
     //1
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")

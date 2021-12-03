@@ -15,8 +15,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
         "wiremock.reset-mappings-after-each-test=true",
         "server.port=12305"})
 class CircuitBreaker_5Test extends CircuitBreakerTestBase {
+
   @Test
-  void リクエストが() {
+  void _4回目と5回目のリクエストがタイムアウトで失敗したときはCircuitbreakerがOPENになり6回目のリクエストはBackendへRoutingしない () {
     //1
     wiremock.stubFor(post(urlEqualTo("/status/201"))
         .inScenario("Custom CircuitBreaker Scenario")
@@ -24,8 +25,8 @@ class CircuitBreaker_5Test extends CircuitBreakerTestBase {
             .withStatus(201))
         .willSetStateTo("Count" + 1));
 
-    //2-5
-    for(int i = 1; i < 5; ++i) {
+    //2,3
+    for (int i = 1; i < 3; ++i) {
       wiremock.stubFor(post(urlEqualTo("/status/201"))
           .inScenario("Custom CircuitBreaker Scenario")
           .whenScenarioStateIs("Count" + i)
@@ -33,40 +34,37 @@ class CircuitBreaker_5Test extends CircuitBreakerTestBase {
               .withStatus(201))
           .willSetStateTo("Count" + (i + 1)));
     }
-    //6-30
-    for (int i = 5; i < 30; ++i) {
+    //4,5,6
+    for (int i = 3; i < 6; ++i) {
       wiremock.stubFor(post(urlEqualTo("/status/201"))
           .inScenario("Custom CircuitBreaker Scenario")
           .whenScenarioStateIs("Count" + i)
           .willReturn(aResponse()
-              .withStatus(500))
+              .withStatus(201)
+              .withFixedDelay(550))
           .willSetStateTo("Count" + (i + 1)));
     }
 
-    for (int i = 0; i < 29; ++i) {
+    for (int i = 0; i < 3; ++i) {
       webTestClient
           .post()
           .uri("/status/201")
           .header("Host", "www.circuitbreaker.customize.com")
-          .exchange();
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+          .exchange().expectStatus().isEqualTo(201);
     }
 
-    webTestClient
-        .post()
-        .uri("/status/201")
-        .header("Host", "www.circuitbreaker.customize.com")
-        .exchange()
-        .expectStatus()
-        .isEqualTo(502);
+    for (int i = 0; i < 3; ++i) {
+      webTestClient
+          .post()
+          .uri("/status/201")
+          .header("Host", "www.circuitbreaker.customize.com")
+          .exchange().expectStatus().isEqualTo(502);
+    }
+
 
     VerificationResult result = wiremock.countRequestsMatching(
         postRequestedFor(urlEqualTo("/status/201")).build());
 
-    assertThat(result.getCount()).isEqualTo(9);
+    assertThat(result.getCount()).isEqualTo(5);
   }
 }
