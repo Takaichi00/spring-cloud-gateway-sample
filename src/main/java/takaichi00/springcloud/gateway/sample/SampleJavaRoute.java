@@ -62,6 +62,8 @@ public class SampleJavaRoute {
                                      SampleConfigurationProperties sampleConfigurationProperties) {
     String httpUri = sampleConfigurationProperties.getHttpBin();
     return builder.routes().route(p -> p
+            .path("/status/204")
+            .and()
             .host("*.circuitbreaker.with-retry.com")
             .filters(f -> f
                 .circuitBreaker(config -> config
