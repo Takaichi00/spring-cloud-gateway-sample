@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class WithRetryDetail_6Test extends CircuitBreakerTestBase {
 
   @Test
-  void retryとCircuitBreakerを組み合わせた場合のテスト() {
+  void _1回目がタイムアウト_2回目が成功の場合はリクエストが成功する() {
     wiremock.stubFor(get(urlEqualTo("/status/204"))
         .inScenario("Retry Scenario")
         .willReturn(aResponse()
@@ -28,7 +28,7 @@ class WithRetryDetail_6Test extends CircuitBreakerTestBase {
         .inScenario("Retry Scenario")
         .whenScenarioStateIs("Cause Success")
         .willReturn(aResponse()
-            .withStatus(200)));
+            .withStatus(204)));
 
     webTestClient
         .get()
@@ -36,7 +36,7 @@ class WithRetryDetail_6Test extends CircuitBreakerTestBase {
         .header("Host", "www.circuitbreaker.with-retry.com")
         .exchange()
         .expectStatus()
-        .isOk();
+        .isNoContent();
 
     VerificationResult result = wiremock.countRequestsMatching(
         getRequestedFor(urlEqualTo("/status/204")).build());
