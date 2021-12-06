@@ -80,8 +80,8 @@ public class SampleJavaRoute {
                 .setSeries(HttpStatus.Series.SERVER_ERROR)
                 .setMethods(HttpMethod.GET, HttpMethod.POST))
             )
-            .metadata(CONNECT_TIMEOUT_ATTR, 100)
-            .metadata(RESPONSE_TIMEOUT_ATTR, 100)
+            .metadata(CONNECT_TIMEOUT_ATTR, 300)
+            .metadata(RESPONSE_TIMEOUT_ATTR, 300)
             .uri(httpUri))
         .build();
   }
