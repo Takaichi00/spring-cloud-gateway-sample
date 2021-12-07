@@ -119,4 +119,58 @@ class WithRetryDetail_6Test extends CircuitBreakerTestBase {
 
     assertThat(result.getCount()).isEqualTo(3);
   }
+
+  @Test
+  void _10回リクエストがタイムアウトしてもCircuitBreakerがOPENにはならない() {
+    // 1
+    wiremock.stubFor(get(urlEqualTo("/status/204"))
+        .inScenario("Retry Scenario")
+        .willReturn(aResponse()
+            .withStatus(204)
+            .withFixedDelay(500))
+        .willSetStateTo("Retry-1"));
+
+    // 2-30
+    for (int i = 1; i < 30; ++i) {
+      wiremock.stubFor(get(urlEqualTo("/status/204"))
+          .inScenario("Retry Scenario")
+          .whenScenarioStateIs("Retry-" + i)
+          .willReturn(aResponse()
+              .withStatus(204)
+              .withFixedDelay(500))
+          .willSetStateTo("Retry-" + (i + 1)));
+    }
+
+    // 31
+    wiremock.stubFor(get(urlEqualTo("/status/204"))
+        .inScenario("Retry Scenario")
+        .whenScenarioStateIs("Retry-30")
+        .willReturn(aResponse()
+            .withStatus(204))
+        .willSetStateTo("Cause Success"));
+
+    for (int i = 0; i < 10; ++i) {
+      webTestClient
+          .get()
+          .uri("/status/204")
+          .header("Host", "www.circuitbreaker.with-retry.com")
+          .exchange()
+          .expectStatus()
+          .isEqualTo(504);
+    }
+
+    webTestClient
+        .get()
+        .uri("/status/204")
+        .header("Host", "www.circuitbreaker.with-retry.com")
+        .exchange()
+        .expectStatus()
+//        .isEqualTo(504);
+        .isEqualTo(204);
+
+    VerificationResult result = wiremock.countRequestsMatching(
+        getRequestedFor(urlEqualTo("/status/204")).build());
+
+    assertThat(result.getCount()).isEqualTo(31);
+  }
 }
